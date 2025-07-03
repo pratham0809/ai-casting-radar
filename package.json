@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "openai": "^5.8.2",
+    "playwright": "^1.53.2",
+    "pnpm": "^10.12.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "tsx": "^4.20.3"
+  }
+}
