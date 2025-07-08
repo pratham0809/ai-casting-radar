@@ -1,4 +1,4 @@
-import { chromium, Browser, Page } from "playwright";
+import { chromium, Page } from "playwright";
 
 export async function withBrowser(fn: (page: Page) => Promise<any>) {
   const browser = await chromium.launch({
