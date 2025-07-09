@@ -1,4 +1,3 @@
-````markdown
 # 🎭 AI-Powered Entertainment Job Scraper
 
 This project scrapes various entertainment-related job listings from public job boards and freelancing platforms, parses the content using LLMs (like Mistral or OpenAI), and stores the structured data in a PostgreSQL database.
@@ -42,7 +41,6 @@ This project scrapes various entertainment-related job listings from public job 
 ├── jobs/                  # (Optional) Raw JSON backup
 ├── .env                   # Environment variables
 ├── README.md
-````
 
 ---
 
