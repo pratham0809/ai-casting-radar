@@ -1,11 +1,15 @@
 import { withBrowser } from "./utils/playwright";
-import openaiClient from "./utils/openai"; // assumes you configured Mistral or OpenAI here
+import openaiClient from "./utils/openai";
 import { extractJsonArrayFromText } from "./utils/extractJsonArrayFromText";
+import { entertainmentJobExtractionPrompt } from "./prompts/jobExtractionPrompt";
 
-interface AIGeneratedJob {
+export interface AIGeneratedJob {
   title: string;
   location?: string;
   description?: string;
+  company?: string;
+  date?: string;
+  url?: string;
   applyLink?: string;
   [key: string]: any;
 }
@@ -14,24 +18,14 @@ export async function scrapeGenericJobBoardWithAI(
   url: string
 ): Promise<AIGeneratedJob[]> {
   return await withBrowser(async (page) => {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
 
-    const htmlContent = await page.evaluate(() => document.body.innerText);
+    const htmlContent = await page.evaluate(() => document.body.innerHTML);
 
-    const prompt = `Extract all casting or creative job listings from the following raw HTML content.
-For each job, return a JSON object with:
-- title
-- description
-- location
-- applyLink (if available)
-
-Only return a JSON array of jobs.
-
-HTML:
-"""${htmlContent.slice(0, 100000)}"""`; // Mistral context limit: ~32k tokens
+    const prompt = entertainmentJobExtractionPrompt(htmlContent);
 
     const response = await openaiClient.chat.completions.create({
-      model: "mistralai/mistral-small-3.2-24b-instruct:free", // free model for now
+      model: "gpt-4o", // or "gpt-3.5-turbo" if you're on the free tier
       messages: [
         {
           role: "system",
@@ -45,14 +39,12 @@ HTML:
       ],
     });
 
-    // Cleanup if AI wraps in markdown or extra text
     const aiResponse = response.choices[0].message.content ?? "";
-    const jobs = extractJsonArrayFromText(aiResponse);
 
     try {
-      return jobs;
+      return extractJsonArrayFromText(aiResponse);
     } catch (err) {
-      console.error("❌ Failed to parse AI response:", aiResponse);
+      console.error("❌ Failed to parse AI response:\n", aiResponse);
       throw err;
     }
   });
