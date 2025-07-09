@@ -41,7 +41,7 @@ This project scrapes various entertainment-related job listings from public job 
 ├── jobs/                  # (Optional) Raw JSON backup
 ├── .env                   # Environment variables
 ├── README.md
-
+```
 ---
 
 ## ⚙️ Setup
