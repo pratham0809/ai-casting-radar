@@ -1,7 +1,3 @@
-Sure! Here's a sample `README.md` update tailored to your entertainment job scraper project, with Postgres integration, AI extraction using Mistral/OpenAI, and Playwright scraping:
-
----
-
 ````markdown
 # 🎭 AI-Powered Entertainment Job Scraper
 
